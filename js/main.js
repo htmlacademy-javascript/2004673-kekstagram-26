@@ -16,8 +16,7 @@ function randomNumber(min, max) {
   return Math.floor(r);
 }
 
-const x = randomNumber(0,11);
-console.log(x);
+randomNumber(0,11);
 
 
 function checkRange(inputtxt, maxlength) {
@@ -29,5 +28,4 @@ function checkRange(inputtxt, maxlength) {
 }
 
 const comment = 'Проверяемый комментарий';
-const check = checkRange(comment, 140);
-console.log(check);
+checkRange(comment, 140);
