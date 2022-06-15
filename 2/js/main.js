@@ -1,31 +1,23 @@
 function randomNumber(min, max) {
-  if (min < 0) {
-    return 'Недопустимое значение! Значения должны быть больше 0';
-  } else if (max < 0) {
-    return 'Недопустимое значение! Значения должны быть больше 0';
-  } else if (min === max) {
-    return 'Недопустимые значения! Значения должны разниться между собой!';
+  if ((min < 0) || (max < 0) || (min === max)) {
+    return -1;
   } else if (min > max) {
-    const temp = min;
-    min = max;
-    max = temp;
-    const rand = Math.random() * (max - min + 1) + min;
-    return Math.floor(rand);
+    [min, max] = [max, min];
   }
   const r = Math.random() * (max - min + 1) + min;
   return Math.floor(r);
 }
-
-randomNumber(0,11);
+const minNum = 0;
+const maxNum = 11;
+randomNumber(minNum, maxNum);
 
 
 function checkRange(inputtxt, maxlength) {
-  if(inputtxt.length <= maxlength)
-  {
-    return true;
-  }
-  return false;
+  return (inputtxt.length <= maxlength) ? 1 :  -1;
 }
 
-const comment = 'Проверяемый комментарий';
-checkRange(comment, 140);
+let comment = 'Проверяемый комментарий';
+const checkLength = 140;
+checkRange(comment, checkLength);
+comment = 'А это новый комментарий';
+checkRange(comment, checkLength);
