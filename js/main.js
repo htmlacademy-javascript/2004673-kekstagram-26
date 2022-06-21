@@ -1,3 +1,51 @@
+const NAMES = [
+  'Морти',
+  'Шаман',
+  'Каспер',
+  'Миха',
+  'Вайс',
+  'Грей',
+];
+
+const MESSAGES = [
+  'Всё отлично!',
+  'В целом всё неплохо. Но не всё.',
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
+];
+
+const DESCRIPTIONS = [
+  'Отдыхаю с котиком.',
+  'Мой песель самый лучший',
+  'Морти - собака сутулая',
+  'Не нравится - не смотри!',
+  'Жизнь - штука тяжелая!',
+  'Покойтесь с миром обои...',
+];
+
+const getRandomArrayElement = (elements) => elements[randomNumber(0, elements.length - 1)];
+
+function generatePhoto() {
+  return {
+    id: randomNumber(1,25),
+    url: `photos/${randomNumber(1,25)}.jpg`,
+    description: getRandomArrayElement(DESCRIPTIONS),
+    likes: randomNumber(15,200),
+    comment: {
+      id: randomNumber(1,200),
+      avatar: `img/avatar-${randomNumber(1,6)}.svg`,
+      message: getRandomArrayElement(MESSAGES),
+      name: getRandomArrayElement(NAMES)
+    }
+  };
+}
+
+const photoArray = Array.from({length: 25}, generatePhoto);
+
+photoArray();//чтобы не ругался eslint
+
 function randomNumber(min, max) {
   if ((min < 0) || (max < 0) || (min === max)) {
     return -1;
@@ -7,10 +55,10 @@ function randomNumber(min, max) {
   const r = Math.random() * (max - min + 1) + min;
   return Math.floor(r);
 }
-const minNum = 0;
-const maxNum = 11;
-randomNumber(minNum, maxNum);
 
+const minNum = 15;
+const maxNum = 200;
+randomNumber(minNum, maxNum);
 
 function checkRange(inputtxt, maxlength) {
   return (inputtxt.length <= maxlength) ? 1 :  -1;
