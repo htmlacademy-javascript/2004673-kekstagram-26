@@ -27,10 +27,10 @@ const DESCRIPTIONS = [
 
 const getRandomArrayElement = (elements) => elements[randomNumber(0, elements.length - 1)];
 
-function generatePhoto() {
+function generatePhoto(index) {
   return {
-    id: randomNumber(1,25),
-    url: `photos/${randomNumber(1,25)}.jpg`,
+    id: index,
+    url: `photos/${index}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
     likes: randomNumber(15,200),
     comment: {
@@ -42,9 +42,9 @@ function generatePhoto() {
   };
 }
 
-const photoArray = Array.from({length: 25}, generatePhoto);
+const photoArray = () => Array.from({length: 25}, (_,i) => generatePhoto(i+ 1));
 
-photoArray();//чтобы не ругался eslint
+photoArray();
 
 function randomNumber(min, max) {
   if ((min < 0) || (max < 0) || (min === max)) {
