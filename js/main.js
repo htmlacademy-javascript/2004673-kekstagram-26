@@ -1,2 +1,4 @@
-import photoArray from './generate';
-photoArray();
+import photoArray from './generate.js';
+import arrayLength from './data.js';
+
+photoArray(arrayLength);

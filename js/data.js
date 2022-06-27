@@ -1,4 +1,4 @@
-import { randomNumber } from './util';
+import { randomNumber } from './util.js';
 
 const NAMES = [
   'Морти',
@@ -27,8 +27,11 @@ const DESCRIPTIONS = [
   'Покойтесь с миром обои...',
 ];
 
+const arrayLength = 25;
+
 const maxCommentLength = 140;
 
 const getRandomArrayElement = (elements) => elements[randomNumber(0, elements.length - 1)];
 
 export {NAMES, MESSAGES, DESCRIPTIONS, getRandomArrayElement, maxCommentLength};
+export default arrayLength;
