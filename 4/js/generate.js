@@ -1,5 +1,5 @@
-import { randomNumber } from './util';
-import { getRandomArrayElement, NAMES, DESCRIPTIONS, MESSAGES } from './data';
+import { randomNumber } from './util.js';
+import { getRandomArrayElement, NAMES, DESCRIPTIONS, MESSAGES } from './data.js';
 
 function generatePhoto(index) {
   return {
@@ -16,8 +16,7 @@ function generatePhoto(index) {
   };
 }
 
-const arrayLength = 25;
+const photoArray = (arrayLength) => Array.from({length: arrayLength}, (_,i) => generatePhoto(i+ 1));
 
-const photoArray = () => Array.from({length: arrayLength}, (_,i) => generatePhoto(i+ 1));
-
-export {generatePhoto, photoArray};
+export default generatePhoto;
+export {photoArray};
