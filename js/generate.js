@@ -18,5 +18,4 @@ function generatePhoto(index) {
 
 const photoArray = (arrayLength) => Array.from({length: arrayLength}, (_,i) => generatePhoto(i+ 1));
 
-export default generatePhoto;
-export {photoArray};
+export {photoArray, generatePhoto};
