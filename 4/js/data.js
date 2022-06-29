@@ -33,5 +33,4 @@ const maxCommentLength = 140;
 
 const getRandomArrayElement = (elements) => elements[randomNumber(0, elements.length - 1)];
 
-export {NAMES, MESSAGES, DESCRIPTIONS, getRandomArrayElement, maxCommentLength};
-export default arrayLength;
+export {NAMES, MESSAGES, DESCRIPTIONS, getRandomArrayElement, maxCommentLength, arrayLength};
