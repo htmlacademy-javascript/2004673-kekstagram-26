@@ -2,78 +2,59 @@ import { photoArray } from './generate.js';
 
 const body = document.querySelector('body');
 
-//Элементы окна полноразмерного изображения
-
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-const bigPictureSrc = bigPicture.querySelector('.big-pucture__img > img');
-const bigPictureDescription = bigPicture.querySelector('.social__caption');
-const bigPictureLike = bigPicture.querySelector('.likes__count');
-const bigPictureCommentsCount = bigPicture.querySelector('.comments-count');
-
-
-//Элементы комментариев к изображению
-
 const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const commentLoader = bigPicture.querySelector('.comments-loader');
-const commentsBlock = bigPicture.querySelector('.social__comments');
-const commentBlock = bigPicture.querySelector('.social__comment');
+const commentList = bigPicture.querySelector('.social__comments');
 
-//Коллекция миниатюр
-const pictureCollection = document.querySelectorAll('.picture');
-
-//Закрытие окна полноразмерного изображения по клику иконки закрытия
-
-bigPictureCancel.addEventListener('click', () => {
+const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
-});
+};
 
-//Закрытие окна полноразмерного изображения по нажатию Escape
+const openBigPicture = (url, likes, comments, description) => {
+  const arrayComments = [];
 
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape') {
-    bigPicture.classList.add('hidden');
-    body.classList.remove('modal-open');
-  }
-});
+  bigPicture.classList.remove('hidden')
+  body.classList.add('modal-open');
 
-let countMessage = 0;
+  bigPicture.querySelector('.big-picture__img img').src = url;
+  bigPicture.querySelector('.big-picture__img img').alt = description;
+  bigPicture.querySelector('.likes-count').textContent = likes;
+  bigPicture.querySelector('.comments-count').textContent = comments.length;
+  bigPicture.querySelector('.social__caption').textContent = description;
 
-pictureCollection.forEach((picture) => {
-  const comments = photoArray[countMessage];
-
-  //Создаем полноразмерное изображение по клику
-  picture.addEventListener('click', () => {
-    const commentsBlockFragment = document.createDocumentFragment();
-
-    for(let i = commentsBlock.children.length - 1; i >= 0; i--) {
-      const child = commentsBlock.children[i];
-      child.parentElement.removeChild(child);
-    }
-
-    bigPicture.classList.remove('hidden');
-    body.classList.add('modal-open');
-    socialCommentCount.classList.add('hidden');
-    commentLoader.classList.add('hidden');
-
-    //Передаем данные в разметку
-    bigPictureSrc.setAttribute('src', picture.querySelector('.picture__img'.src));
-    bigPictureDescription.textContent = picture.querySelector('.picture__img').alt;
-    bigPictureLike.textContent = picture.querySelector('.picture__likes').textContent;
-    bigPictureCommentsCount.textContent = picture.querySelector('.picture__comments').textContent;
-
-    //Генерируем блоки комментариев
-    comments.forEach((comment) => {
-      const cloneCommentBlock = commentBlock[0].cloneNode(true);
-
-      cloneCommentBlock.querySelector('.social__comment > .social__picture').setAttribute('src', comment.avatar);
-      cloneCommentBlock.querySelector('.social__comment > .social__picture').setAttribute('alt', comment.name);
-      cloneCommentBlock.querySelector('.social__text').textContent = comment.message;
-
-      commentsBlockFragment.appendChild(cloneCommentBlock);
-    });
-    commentsBlock.append(commentsBlockFragment);
+  comments.forEach(({avatar, name, message}) => {
+    const socialComment = document.querySelector('.social__comment').cloneNode(true);
+    socialComment.querySelector('.social__picture').src = avatar;
+    socialComment.querySelector('.social__picture').alt = name;
+    socialComment.querySelector('.social__text').textContent = message;
+    arrayComments.push(socialComment);
   });
-  countMessage++;
-});
+
+  while (commentList.firstChild) {
+    commentList.removeChild(commentList.firstChild);
+  };
+
+  arrayComments.forEach((el, index) => {
+    if(index > 4) {
+      el.classList.add('hidden');
+    }    
+    commentList.append(el);
+  });
+
+  bigPictureCancel.addEventListener('click', () => {
+    closeBigPicture();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') {
+      e.preventDefault();
+      closeBigPicture();
+    }
+  });
+
+};
+
+export {openBigPicture};
