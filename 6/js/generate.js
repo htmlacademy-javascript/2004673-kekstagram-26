@@ -1,21 +1,23 @@
 import { randomNumber } from './util.js';
-import { getRandomArrayElement, NAMES, DESCRIPTIONS, MESSAGES } from './data.js';
+import { getRandomArrayElement, NAMES, DESCRIPTIONS, MESSAGES, arrayLength } from './data.js';
 
-function generatePhoto(index) {
-  return {
+const comments = (index) => ({
+  id: randomNumber(1,200),
+  avatar: `img/avatar-${randomNumber(1,6)}.svg`,
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(NAMES)
+});
+
+const generateComments = Array.from({length: arrayLength}, (currentValue,i) => comments(i + 1));
+
+const generatePhoto = (index) => ({
     id: index,
     url: `photos/${index}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
     likes: randomNumber(15,200),
-    comment: {
-      id: randomNumber(1,200),
-      avatar: `img/avatar-${randomNumber(1,6)}.svg`,
-      message: getRandomArrayElement(MESSAGES),
-      name: getRandomArrayElement(NAMES)
-    }
-  };
-}
+    comments: generateComments,
+});
 
-const photoArray = (arrayLength) => Array.from({length: arrayLength}, (_,i) => generatePhoto(i+ 1));
+const photoArray = Array.from({length: arrayLength}, (currentValue,i) => generatePhoto(i + 1));
 
-export {photoArray, generatePhoto};
+export {photoArray};
