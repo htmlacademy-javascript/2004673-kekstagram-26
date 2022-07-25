@@ -1,7 +1,7 @@
-import { openBigPicture } from './bigpicture.js';
+import { openBigPicture } from './big-picture.js';
 import { renderComments } from './comments.js';
 
-const picturesContainer = document.querySelector('.pictures');
+const picturesElement = document.querySelector('.pictures');
 
 const pictureTemplate = document.querySelector('#picture')
   .content
@@ -9,14 +9,15 @@ const pictureTemplate = document.querySelector('#picture')
 
 const createThumbnail = (data) => {
   const dataFragment = document.createDocumentFragment();
-  const photo = pictureTemplate.cloneNode(true);
-  photo.querySelector('.picture__img').src = data.url;
-  photo.querySelector('.picture__img').alt = data.description;
-  photo.querySelector('.picture__likes').textContent = data.likes;
-  photo.querySelector('.picture__comments').textContent = data.comments.length;
-  dataFragment.appendChild(photo);
-  picturesContainer.appendChild(dataFragment);
-  photo.addEventListener('click', (evt) => {
+  const photoElement = pictureTemplate.cloneNode(true);
+  const photoImgElement = photoElement.querySelector('.picture__img');
+  photoImgElement.src = data.url;
+  photoImgElement.alt = data.description;
+  photoElement.querySelector('.picture__likes').textContent = data.likes;
+  photoElement.querySelector('.picture__comments').textContent = data.comments.length;
+  dataFragment.appendChild(photoElement);
+  picturesElement.appendChild(dataFragment);
+  photoElement.addEventListener('click', (evt) => {
     evt.preventDefault();
     renderComments(data);
     openBigPicture(data);
@@ -24,9 +25,9 @@ const createThumbnail = (data) => {
 };
 
 const createThumbnails = (data) => {
-  for(let k = 0; k < data.length; k++) {
-    createThumbnail(data[k]);
-  }
+  data.forEach((elem) => {
+    createThumbnail(elem);
+  });
 };
 
-export {picturesContainer, createThumbnails};
+export {picturesElement, createThumbnails};

@@ -4,7 +4,7 @@ import { addFormChangeHandler } from './form.js';
 import { addPreviewFunctional } from './picture.js';
 import { formValidation } from './validator.js';
 import { alert } from './util.js';
-import { showFilters, addFilters } from './sort.js';
+import {onWindowLoadShowFilters, addFilters} from './sort.js';
 
 getData (
   (serverData) => {
@@ -16,7 +16,7 @@ getData (
   }
 );
 
-window.addEventListener('load', showFilters);
+window.addEventListener('load', onWindowLoadShowFilters);
 addFormChangeHandler();
 formValidation();
 addPreviewFunctional();

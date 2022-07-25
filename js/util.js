@@ -1,18 +1,16 @@
 import { MAX_COMMENT_LENGTH, ALERT_SHOW_TIME } from './data.js';
 
-const randomNumber = (min, max) => {
+const getRandomNumber = (min, max) => {
   if ((min < 0) || (max < 0) || (min === max)) {
     return -1;
-  } else if (min > max) {
-    [min, max] = [max, min];
   }
-  const r = Math.random() * (max - min + 1) + min;
-  return Math.floor(r);
+  return (max > min) ? Math.floor(Math.random() * (max - min + 1) + min)
+    : Math.floor(Math.random() * (min - max + 1) + max);
 };
 
 const checkRange = (inputtxt) => inputtxt.length <= MAX_COMMENT_LENGTH;
 
-const getRandomArrayElement = (array) => array[randomNumber(0, array.length -1)];
+const getRandomArrayElement = (array) => array[getRandomNumber(0, array.length -1)];
 
 const clearContainer = (container) => {
   container.innerHTML = '';
@@ -49,4 +47,4 @@ const debounce = (cb, timeoutDelay) => {
   };
 };
 
-export {randomNumber, checkRange, clearContainer, isEnterKey, isEscapeKey, alert, debounce, getRandomArrayElement};
+export {getRandomNumber, checkRange, clearContainer, isEnterKey, isEscapeKey, alert, debounce, getRandomArrayElement};

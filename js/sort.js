@@ -1,27 +1,27 @@
 import { DELAY, PHOTOS_TO_SHOW } from './data.js';
-import { picturesContainer, createThumbnails } from './thumbnails.js';
+import { picturesElement, createThumbnails } from './thumbnails.js';
 import { getRandomArrayElement, debounce } from './util.js';
 
-const imgFilters = document.querySelector('.img-filters');
-const imgFiltersButtons = imgFilters.querySelectorAll('.img-filters__button');
+const imgFiltersElement = document.querySelector('.img-filters');
+const imgFiltersButtonsElement = imgFiltersElement.querySelectorAll('.img-filters__button');
 
 const compareComments = (dataA, dataB) => dataB.comments.length - dataA.comments.length;
 
-const showFilters = () => {
-  imgFilters.classList.remove('img-filters--inactive');
+const onWindowLoadShowFilters = () => {
+  imgFiltersElement.classList.remove('img-filters--inactive');
 };
 
 const showDefault = (data) => {
   createThumbnails(data);
 };
 
-const showRandow = (data) => {
-  let result = [];
-  while (result.length < PHOTOS_TO_SHOW) {
-    result.push(getRandomArrayElement(data));
-    result = result.filter((k, i, arr) => arr.indexOf(k) === i);
+const showRandom = (data) => {
+  let results = [];
+  while (results.length < PHOTOS_TO_SHOW) {
+    results.push(getRandomArrayElement(data));
+    results = results.filter((k, i, arr) => arr.indexOf(k) === i);
   }
-  createThumbnails(result);
+  createThumbnails(results);
 };
 
 const showDiscussed = (data) => {
@@ -34,18 +34,17 @@ const addFilters = (data) => {
   const onFilterButtonClick = (evt) => {
     evt.preventDefault();
     if(!evt.target.classList.contains('img-filters__button--active')) {
-      const filterButtonActive = imgFilters.querySelector('.img-filters__button--active');
+      const filterButtonActive = imgFiltersElement.querySelector('.img-filters__button--active');
       filterButtonActive.classList.remove('img-filters__button--active');
       evt.target.classList.add('img-filters__button--active');
     }
-    const pictures = picturesContainer.querySelectorAll('.picture');
+    const pictures = picturesElement.querySelectorAll('.picture');
     pictures.forEach((elem) => elem.remove());
 
     if (evt.target.id === 'filter-random') {
-      showRandow(data);
+      showRandom(data);
       return;
     }
-
     if (evt.target.id === 'filter-discussed') {
       showDiscussed(data);
       return;
@@ -53,8 +52,8 @@ const addFilters = (data) => {
     showDefault(data);
   };
   const debounceOnFilterButtonClick = debounce(onFilterButtonClick, DELAY);
-  imgFiltersButtons.forEach((elem) => elem.addEventListener('click', debounceOnFilterButtonClick));
+  imgFiltersButtonsElement.forEach((elem) => elem.addEventListener('click', debounceOnFilterButtonClick));
 };
 
-export {showFilters, addFilters};
+export {onWindowLoadShowFilters, addFilters};
 

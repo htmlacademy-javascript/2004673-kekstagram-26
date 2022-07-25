@@ -1,12 +1,12 @@
 import { checkRange, isEscapeKey } from './util.js';
-import { uploadForm, closeUploadOverlay, hideUploadOverlay, unHideOverplay  } from './form.js';
+import { uploadFormElement, closeUploadOverlay, hideUploadOverlay, unHideOverlay } from './form.js';
 import { sendData } from './api.js';
 import { MAX_TAGS, TAGS_REGEX, ERROR_MESSAGES } from './data.js';
 
-const body = document.querySelector('body');
-const textHashtag = uploadForm.querySelector('.text__hashtags');
-const textDescription = uploadForm.querySelector('.text__description');
-const submitButton = uploadForm.querySelector('.img-upload__submit');
+const bodyElement = document.querySelector('body');
+const textHashtagElement = uploadFormElement.querySelector('.text__hashtags');
+const textDescriptionElement = uploadFormElement.querySelector('.text__description');
+const submitButtonElement = uploadFormElement.querySelector('.img-upload__submit');
 
 const successTemplate = document.querySelector('#success')
   .content
@@ -23,8 +23,8 @@ const onInputEscKeydown = (evt) => {
   }
 };
 
-textHashtag.addEventListener('keydown', onInputEscKeydown);
-textDescription.addEventListener('keydown', onInputEscKeydown);
+textHashtagElement.addEventListener('keydown', onInputEscKeydown);
+textDescriptionElement.addEventListener('keydown', onInputEscKeydown);
 
 const formValidation = () => {
   const isHashtagsCorrect = (data) => {
@@ -46,7 +46,7 @@ const formValidation = () => {
     return (tagsArray.length === uniqueTags.length);
   };
 
-  const pristine = new Pristine(uploadForm, {
+  const pristine = new Pristine(uploadFormElement, {
     classTo: 'img-upload__field-wrapper',
     errorClass: 'img-upload__item--invalid',
     successClass: 'img-upload__item--valid',
@@ -56,53 +56,53 @@ const formValidation = () => {
   });
 
   pristine.addValidator(
-    textHashtag,
+    textHashtagElement,
     isHashtagsCorrect,
     ERROR_MESSAGES.hashtagsCorrect
   );
 
   pristine.addValidator(
-    textHashtag,
+    textHashtagElement,
     isHashtagsCountCorrect,
     ERROR_MESSAGES.hashtagsCount
   );
 
   pristine.addValidator(
-    textHashtag,
+    textHashtagElement,
     isHashtagDuplicate,
     ERROR_MESSAGES.hashtagsUnique
   );
 
   pristine.addValidator(
-    textDescription,
+    textDescriptionElement,
     checkRange,
     ERROR_MESSAGES.commentLength
   );
 
   let successMessage, successButton, errorMessage, errorButton;
 
-  let removeSuccessMessage = () => {};
-  let removeErrorMessage = () => {};
+  let onSuccessMessageRemoveSuccessMessage = () => {};
+  let onErrorMessageRemoveErrorMessage = () => {};
 
   const blockSubmit = () => {
-    submitButton.disabled = true;
-    submitButton.textContent = 'Публикую...';
+    submitButtonElement.disabled = true;
+    submitButtonElement.textContent = 'Публикую...';
   };
 
   const unBlockSubmit = () => {
-    submitButton.disabled = false;
-    submitButton.textContent = 'Опубликовать';
+    submitButtonElement.disabled = false;
+    submitButtonElement.textContent = 'Опубликовать';
   };
 
   const onSuccessMessageEscKeydown = (evt) => {
     if(isEscapeKey(evt)) {
-      removeSuccessMessage();
+      onSuccessMessageRemoveSuccessMessage();
     }
   };
 
   const onErrorMessageEscKeydown = (evt) => {
     if(isEscapeKey(evt)) {
-      removeErrorMessage();
+      onErrorMessageRemoveErrorMessage();
       evt.stopPropagation();
     }
   };
@@ -111,7 +111,7 @@ const formValidation = () => {
     const dataFragment = document.createDocumentFragment();
     successMessage = successTemplate.cloneNode(true);
     dataFragment.appendChild(successMessage);
-    body.appendChild(dataFragment);
+    bodyElement.appendChild(dataFragment);
     successButton = successMessage.querySelector('.success__button');
   };
 
@@ -119,46 +119,46 @@ const formValidation = () => {
     const dataFragment = document.createDocumentFragment();
     errorMessage = errorTemplate.cloneNode(true);
     dataFragment.appendChild(errorMessage);
-    body.appendChild(dataFragment);
+    bodyElement.appendChild(dataFragment);
     errorButton = errorMessage.querySelector('.error__button');
   };
 
   const onSuccessMessageClick = (evt) => {
     if(evt.target === successMessage) {
-      removeSuccessMessage();
+      onSuccessMessageRemoveSuccessMessage();
     }
   };
 
   const onErrorMessageClick = (evt) => {
     if(evt.target === errorMessage) {
-      removeErrorMessage();
+      onErrorMessageRemoveErrorMessage();
     }
   };
 
-  const eventToSuccessMessage = () => {
-    successButton.addEventListener('click', removeSuccessMessage);
+  const addEventToSuccessMessage = () => {
+    successButton.addEventListener('click', onSuccessMessageRemoveSuccessMessage);
     successMessage.addEventListener('click', onSuccessMessageClick);
     document.addEventListener('keydown', onSuccessMessageEscKeydown);
   };
 
-  const eventToErrorMessage = () => {
-    errorButton.addEventListener('click', removeErrorMessage);
+  const addEventToErrorMessage = () => {
+    errorButton.addEventListener('click', onErrorMessageRemoveErrorMessage);
     errorMessage.addEventListener('click', onErrorMessageClick);
     document.addEventListener('keydown', onErrorMessageEscKeydown);
   };
 
-  removeSuccessMessage = () => {
+  onSuccessMessageRemoveSuccessMessage = () => {
     successMessage.remove();
     document.removeEventListener('keydown', onSuccessMessageEscKeydown);
   };
 
-  removeErrorMessage = () => {
+  onErrorMessageRemoveErrorMessage = () => {
     errorMessage.remove();
     document.removeEventListener('keydown', onErrorMessageEscKeydown);
-    unHideOverplay();
+    unHideOverlay();
   };
 
-  uploadForm.addEventListener('submit', (evt) => {
+  uploadFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     if(pristine.validate()) {
       blockSubmit();
@@ -167,15 +167,15 @@ const formValidation = () => {
           unBlockSubmit();
           closeUploadOverlay();
           createSuccessMessage();
-          eventToSuccessMessage();
+          addEventToSuccessMessage();
         },
         () => {
           unBlockSubmit();
           hideUploadOverlay();
           createErrorMessage();
-          eventToErrorMessage();
+          addEventToErrorMessage();
         },
-        new FormData(uploadForm)
+        new FormData(uploadFormElement)
       );
     }
   });

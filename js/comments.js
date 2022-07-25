@@ -4,43 +4,44 @@ import { COMMENTS_TO_SHOW } from './data.js';
 const commentTemplate = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
-const bigPictureCommentContainer = document.querySelector('.big-picture__social');
-const captionElement = bigPictureCommentContainer.querySelector('.social__caption');
-const likesCount = bigPictureCommentContainer.querySelector('.likes-count');
-const commentCount = bigPictureCommentContainer.querySelector('.social__comment-count');
-const commentsCount = commentCount.querySelector('.comments-count');
-const commentsList = bigPictureCommentContainer.querySelector('.social__comments');
-const loaderButton = bigPictureCommentContainer.querySelector('.comments-loader');
-const commentsShownElement = commentCount.querySelector('.comments-count-shown');
+const bigPictureCommentElement = document.querySelector('.big-picture__social');
+const captionElement = bigPictureCommentElement.querySelector('.social__caption');
+const likesCountElement = bigPictureCommentElement.querySelector('.likes-count');
+const commentCountElement = bigPictureCommentElement.querySelector('.social__comment-count');
+const commentsCountElement = commentCountElement.querySelector('.comments-count');
+const commentsListElement = bigPictureCommentElement.querySelector('.social__comments');
+const loaderButtonElement = bigPictureCommentElement.querySelector('.comments-loader');
+const commentsShownElement = commentCountElement.querySelector('.comments-count-shown');
 
 const showComment = (comment) => {
   const commentFragment = document.createDocumentFragment();
   const commentElement = commentTemplate.cloneNode(true);
-  commentElement.querySelector('img').src = comment.avatar;
-  commentElement.querySelector('img').alt = comment.name;
+  const commentImgElement = commentElement.querySelector('img');
+  commentImgElement.src = comment.avatar;
+  commentImgElement.alt = comment.name;
   commentElement.querySelector('.social__text').textContent = comment.message;
   commentElement.classList.add('hidden');
   commentFragment.appendChild(commentElement);
-  commentsList.appendChild(commentFragment);
+  commentsListElement.appendChild(commentFragment);
 };
 
 const showComments = (object) => {
-  for (let i = 0; i< object.comments.length; i++) {
-    showComment(object.comments[i]);
-  }
+  object.comments.forEach((elem) => {
+    showComment(elem);
+  });
 };
 
 let commentsShown;
 
-const showHiddenComments = () => {
-  const commentsListItems = commentsList.querySelectorAll('.social__comment');
+const loaderButtonShowHiddenCommentsHandler = () => {
+  const commentsListItemsElement = commentsListElement.querySelectorAll('.social__comment');
 
   for(let j = 0; j< COMMENTS_TO_SHOW; j++){
-    if(commentsShown === commentsListItems.length) {
-      loaderButton.classList.add('hidden');
+    if(commentsShown === commentsListItemsElement.length) {
+      loaderButtonElement.classList.add('hidden');
     }
-    if(commentsShown < commentsListItems.length) {
-      commentsListItems[commentsShown].classList.remove('hidden');
+    if(commentsShown < commentsListItemsElement.length) {
+      commentsListItemsElement[commentsShown].classList.remove('hidden');
       commentsShown++;
     }
   }
@@ -49,18 +50,18 @@ const showHiddenComments = () => {
 
 const showAllComments = () => {
   commentsShown = 0;
-  showHiddenComments();
+  loaderButtonShowHiddenCommentsHandler();
 };
 
 const renderComments = (object) => {
-  loaderButton.classList.remove('hidden');
+  loaderButtonElement.classList.remove('hidden');
   captionElement.textContent = object.description;
-  likesCount.textContent = object.likes;
-  commentsCount.textContent = object.comments.length;
-  clearContainer(commentsList);
+  likesCountElement.textContent = object.likes;
+  commentsCountElement.textContent = object.comments.length;
+  clearContainer(commentsListElement);
   showComments(object);
   showAllComments();
-  loaderButton.addEventListener('click', showHiddenComments);
+  loaderButtonElement.addEventListener('click', loaderButtonShowHiddenCommentsHandler);
 };
 
 export {renderComments};
